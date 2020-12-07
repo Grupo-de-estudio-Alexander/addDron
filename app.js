@@ -8,7 +8,7 @@ const express = require("express")
 const helmet = require("helmet")
 const morgan = require("morgan")
 const cors = require("cors")
-// const routeLogin = require("./routes/loginRoutes")
+const routeDrones = require("./src/routes/dronRoute")
 
 const app = express()
 
