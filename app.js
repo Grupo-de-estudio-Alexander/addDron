@@ -1,5 +1,5 @@
 require("dotenv").config()
-const dbConnection = require("./config/dbconnection")
+const dbConnection = require("./src/config/dbconnection")
 const path = require('path')
 const fs = require('fs')
 
@@ -18,17 +18,17 @@ app.use(morgan("dev"))
 app.use(helmet())
 app.use(cors())
 
+
 app.get("/", (req, res) => {
     console.log("funciona")
-    console.log(publicDirectory)
-    res.send("servidor conectado")
+    res.status(201).json("servidor conectado")
 })
-// app.use("/netflix", routeLogin)
+
 
 //app.com/config API para configuración de la aplicación
 app.post('/config', function (req, res) {
     // Leer archivo con los parametros iniciales de la aplicación de entregas
-    const initialConfigPath = path.join(__dirname,'./data/initial_parameters.json')
+    const initialConfigPath = path.join(__dirname,'./src/data/initial_parameters.json')
     const fileContents = fs.readFileSync(initialConfigPath, 'utf8')
     const initialConfig = JSON.parse(fileContents)
 
