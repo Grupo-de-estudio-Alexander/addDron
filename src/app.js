@@ -3,7 +3,7 @@ const dbConnection = require("./config/dbconnection")
 const path = require('path')
 const fs = require('fs')
 
-// dbConnection()
+dbConnection()
 const express = require("express")
 const helmet = require("helmet")
 const morgan = require("morgan")
@@ -12,18 +12,11 @@ const cors = require("cors")
 
 const app = express()
 
-app.use(express.json())
+app.use(express.json()) // for parsing application/json
+
 app.use(morgan("dev"))
 app.use(helmet())
 app.use(cors())
-
-// para renderizar los archivos html
-app.set('views', path.join(__dirname, '../public'));
-app.engine('html', require('ejs').renderFile);
-
-//Directorio public
-const publicDirectory = path.join(__dirname, '../public')
-app.use(express.static(publicDirectory))
 
 app.get("/", (req, res) => {
     console.log("funciona")
@@ -31,16 +24,6 @@ app.get("/", (req, res) => {
     res.send("servidor conectado")
 })
 // app.use("/netflix", routeLogin)
-
-
-
-//app.com/parametros
-app.get('/parametros', (req, res) => {
-    // res.send('Que pasa')
-    res.render('parametros.html')
-})
-
-app.use(express.json()) // for parsing application/json
 
 //app.com/config API para configuración de la aplicación
 app.post('/config', function (req, res) {
