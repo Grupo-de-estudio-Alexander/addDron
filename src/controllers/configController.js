@@ -12,31 +12,39 @@ class ControllerConfiguracion {
             const initialConfig = JSON.parse(fileContents)
 
             //actualizar el tamaño de la grilla
-            if (req.body.grilla) {
-                initialConfig.tamanoGrilla = req.body.grilla
-                console.log('Tamaño de la grilla actualizado a',req.body.grilla)
+            if (req.body.tamanoGrilla) {
+                initialConfig.tamanoGrilla = req.body.tamanoGrilla
+                console.log('Tamaño de la grilla actualizado a',req.body.tamanoGrilla)
             }
             //actualizar el punto de partida
-            if (req.body.puntoInicial) {
-                initialConfig.posicionInicial = req.body.puntoInicial
-                console.log('Punto incial actualizado a',req.body.puntoInicial)
+            if (req.body.posicionInicial) {
+                initialConfig.posicionInicial = req.body.posicionInicial
+                console.log('Punto incial actualizado a',req.body.posicionInicial)
             }
             //actualizar la orientación inicial de los drones
-            if (req.body.orientacion) {
-                initialConfig.orientacionInicial = req.body.orientacion
-                console.log('Orientación inicial actualizado a',req.body.orientacion)
+            if (req.body.orientacionInicial) {
+                initialConfig.orientacionInicial = req.body.orientacionInicial
+                console.log('Orientación inicial actualizado a',req.body.orientacionInicial)
             }
             //actualizar la capacidad de entrega de los drones
-            if (req.body.capacidad) {
-                initialConfig.capacidadDrones = req.body.capacidad
-                console.log('capacidad actualizado a',req.body.capacidad)
+            if (req.body.capacidadDrones) {
+                initialConfig.capacidadDrones = req.body.capacidadDrones
+                console.log('capacidad actualizado a',req.body.capacidadDrones)
             }
-            
+            //actualizar la cantidad de drones
+            if (req.body.cantidadDrones) {
+                initialConfig.cantidadDrones = req.body.cantidadDrones
+                console.log('capacidad actualizado a',req.body.cantidadDrones)
+            }
+
             //Guardar nueva configuración en el archivo json
             fs.writeFileSync(initialConfigPath, JSON.stringify(initialConfig))
 
             //responder a frontend
-            return res.send({ resultado: 'Actualización exitosa' })
+            return res.send({ 
+                resultado: 'Actualización exitosa',
+                parametros: initialConfig
+            })
 
         } catch(error) {
             console.log(error.message)
