@@ -30,4 +30,5 @@ class ControllerDron {
 }
 
 const controllerDron = new ControllerDron()
+
 module.exports = controllerDron
