@@ -45,7 +45,8 @@ class ControllerDron {
             let ubicacion = id.posicionInicial
             let estado = id.orientacion
             let tamañoGrilla = initialConfig.tamanoGrilla
-            let capacidad = id.capacidad 
+            let capacidad = id.capacidad
+            let historial = id.historial  
 
             // 0 = NORTE, 1 ORIENTE, 2 SUR 3 OCCIDENTE
             array.forEach(letra => {
@@ -85,8 +86,8 @@ class ControllerDron {
                 await id.updateOne({posicionInicial:[0,0],capacidad:3}) 
                 
             }
-
-            res.status(200).json(id)
+            console.log(capacidad); 
+            res.status(200).json(id,capacidad,historial)
 
 
         }catch(error){
