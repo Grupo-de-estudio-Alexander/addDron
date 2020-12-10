@@ -74,6 +74,7 @@ class ControllerDron {
             if (ubicacion[0] > tamañoGrilla || ubicacion[0] < 0 ) res.status(400).json("salio de la grilla")
             if (ubicacion[1] > tamañoGrilla || ubicacion[1] < 0 ) res.status(400).json("salio de la grilla")
             id.historial.push(id.posicionInicial)
+            id.posicionInicial=ubicacion
             await id.save()
             console.log(ubicacion)
             if (capacidad > 0 ) {
