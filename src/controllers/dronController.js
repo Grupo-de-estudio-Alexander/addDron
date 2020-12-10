@@ -1,3 +1,4 @@
+const { model } = require("mongoose")
 const modelDron = require("../model/dronModel")
 
 
@@ -29,11 +30,14 @@ class ControllerDron {
  //API LOGICA DE LA UBICACION DEL DRON 
     UbicacionDron = async(req,res) => {
         try{
+            const [id] = await modelDron.find({id:req.body.id})
             const palabra = req.body.cadena
             const array = palabra.split("")
-            let ubicacion = [0,0]
-            let estado = 0
-            let tamañoGrilla = 2
+            let ubicacion = id.posicionInicial
+            let estado = id.orientacion
+            let tamañoGrilla = id.grilla
+            let capacidad = id.capacidad 
+
             // 0 = NORTE, 1 ORIENTE, 2 SUR 3 OCCIDENTE
             array.forEach(letra => {
                 if (letra === "A" ){
@@ -60,12 +64,25 @@ class ControllerDron {
             });
             if (ubicacion[0] > tamañoGrilla || ubicacion[0] < 0 ) res.status(400).json("salio de la grilla")
             if (ubicacion[1] > tamañoGrilla || ubicacion[1] < 0 ) res.status(400).json("salio de la grilla")
-            
-            res.status(200).json(ubicacion)
+            id.historial.push(id.posicionInicial)
+            await id.save()
+            console.log(ubicacion)
+            if (capacidad > 0 ) {
+                capacidad -= 1
+                await id.updateOne({posicionInicial:ubicacion,capacidad:capacidad}) 
+
+            }else{
+                await id.updateOne({posicionInicial:[0,0],capacidad:3}) 
+                
+            }
+
+            res.status(200).json(id)
+
 
         }catch(error){
             console.log(error);   
         }
+
         
     }
 
@@ -73,5 +90,6 @@ class ControllerDron {
 }
 
 const controllerDron = new ControllerDron()
+
 
 module.exports = controllerDron
