@@ -86,6 +86,39 @@ class ControllerDron {
         
     }
 
+    //Cantidad de entregas
+    EntregasDron = async(req,res) => {
+        try{
+            const conteo = await modelDron.find({id:req.body.id})
+            let cont = 0;
+            let faltantes = 0;
+            for (const i in conteo[0]["historial"][0]) {
+                cont++;
+            }
+            faltantes = conteo[0]["capacidad"]-cont;
+            if (cont > conteo[0]["capacidad"]) {
+               
+                return res.send({ 
+                    status: 200,
+                    entregas: cont,
+                    faltantes: faltantes,
+                    resultado: 'El dron a excedido la capacidad de entregas'
+                });
+                //res.status(200).json(respustes:"")
+            }
+            return res.send({ 
+                status: 200,
+                entregas: cont,
+                faltantes: faltantes,
+                resultado: 'Tiene entregas disponibles'
+            });
+           // res.status(200).json(conteo[0]["historial"])
+        }catch(error){
+            console.log(error);   
+        }
+
+    }
+
 
 }
 
