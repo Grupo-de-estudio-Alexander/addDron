@@ -6,5 +6,6 @@ router.route("/").get(dronControllers.AllDron)
 router.route("/ubicacion").post(dronControllers.UbicacionDron)
 // ruta para cambiar los parametros de la configuración inicial
 router.route("/config").post(configControllers.modificarParametros)
+router.route("/aaa").get(dronControllers.pruebas)
 
 module.exports = router
