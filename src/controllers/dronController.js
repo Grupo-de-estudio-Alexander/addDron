@@ -94,7 +94,18 @@ class ControllerDron {
 
         
     }
+    deleteAllDron = async(req, res)=>{
+        try {
+            const datos = await modelDron.deleteMany({ });
+            console.log(datos)
+            res.status(201).json("delete DB")
 
+        } catch (error) {
+            console.log(error);  
+        }
+
+    }
+ 
 
 }
 
