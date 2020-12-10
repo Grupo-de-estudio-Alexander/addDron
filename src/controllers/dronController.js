@@ -1,6 +1,7 @@
 const { model } = require("mongoose")
 const modelDron = require("../model/dronModel")
-
+const path = require('path')
+const fs = require('fs')
 
 
 class ControllerDron {
@@ -29,13 +30,21 @@ class ControllerDron {
     };
  //API LOGICA DE LA UBICACION DEL DRON 
     UbicacionDron = async(req,res) => {
+
         try{
-            const [id] = await modelDron.find({id:req.body.id})
-            const palabra = req.body.cadena
+            // Leer archivo con los parametros iniciales de la aplicación de entregas
+            const initialConfigPath = path.join(__dirname,'../data/initial_parameters.json')
+            console.log(initialConfigPath)
+            const fileContents = fs.readFileSync(initialConfigPath, 'utf8')
+            const initialConfig = JSON.parse(fileContents)
+
+            const [id] = await modelDron.find({id:req.body.droneId})
+            console.log(req.body)
+            const palabra = req.body.direccion
             const array = palabra.split("")
             let ubicacion = id.posicionInicial
             let estado = id.orientacion
-            let tamañoGrilla = id.grilla
+            let tamañoGrilla = initialConfig.tamanoGrilla
             let capacidad = id.capacidad 
 
             // 0 = NORTE, 1 ORIENTE, 2 SUR 3 OCCIDENTE
