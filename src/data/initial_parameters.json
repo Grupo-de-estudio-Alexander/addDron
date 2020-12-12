@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"tamanoGrilla":"20","posicionInicial":"0,0","orientacionInicial":"NORTE","capacidadDrones":"3","cantidadDrones":"4"}
-=======
-{"tamanoGrilla":"20","posicionInicial":"1,1","orientacionInicial":"NORTE","capacidadDrones":"3","cantidadDrones":"4"}
->>>>>>> manuel
+{"tamanoGrilla":"20","posicionInicial":"0,0","orientacionInicial":"NORTE","capacidadDrones":"3","cantidadDrones":"5"}
