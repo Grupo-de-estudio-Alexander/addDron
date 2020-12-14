@@ -33,33 +33,81 @@ const options = {
     }
   }
 
-app.get('/reporte', (req, res) => {
-    const fileName = './reporte.zip'
-    res.sendFile(fileName, options, function (err) {
+const fs = require('fs')
+const path = require('path')
+const generarZip = require('./src/services/creadorZip.js')
+// API para generar el reporte zip con la ubicación final de los drones
+app.get('/reporte', async (req, res) => {
+    
+    // Leer los archivos de reportes que se tienen
+    const reportesDirectory = './src/reportes'
+   
+    fs.readdir(reportesDirectory, async function (err, files) {
       if (err) {
-        next(err)
-      } else {
-        console.log('Sent:', fileName)
+        console.error("Could not list the directory.", err);
+        process.exit(1);
       }
-    })
+      console.log('files: ', files)
+      reportes = files.map(archivo => path.join(reportesDirectory, archivo))
+      console.log('files: ', reportes)
+
+      // Generar zip con los reportes
+      generarZip(reportes)
+
+      // enviar archivo zip generado
+      const reporteZip = './src/reporte.zip'
+
+      setTimeout(() => {
+        res.status(200)
+        .sendFile(reporteZip, options, function (err) {
+          if (err) {
+            next(err)
+          } else {
+            console.log('Sent:', reporteZip)
+          }
+        })
+      }, 2000)
+    }) 
 })
 
 
 // api para recibir reportes del frontend
-const path = require('path')
-const multer = require('multer') // v1.0.5
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname,'/uploads'))
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname)
-    }
-  })
-const upload = multer({ storage: storage }) // for parsing multipart/form-data
-app.post('/input',upload.single('file'), (req, res) => {
-    console.log('post')
-    res.status(200)
+
+const multer = require('multer') // modulo para recibir archivos
+const { pathToFileURL } = require("url")
+var storage = multer.memoryStorage() // metodo para leer el contenido del archivo
+const upload = multer({ storage: storage }) // setting para poder leer el contenido
+
+app.post('/input',upload.any(), async (req, res) => {
+  
+  // se puede acceder a los archivos con req.files
+
+  // iterar por cada archivo subido
+  for (let i=0; i<req.files.length; i++) {
+
+    const tempFile = req.files[i]
+    
+    // información del archivo
+    // console.log('files:',req.files) // ver todas las propiedades del archivo
+    console.log('filaname:', tempFile.originalname) // ver el nombre del archivo
+    // console.log('size', tempFile.size) // ver tamaño del archivo
+
+    // determinar numero del dron
+    const regex1 = /in([0-9]+).txt/i
+    const droneId = tempFile.originalname.match(regex1)[1]
+    
+    // Leer el contenido del archivo
+    const regex2 = /\r\n/ // regex porque el contenido llega así: AAA\r\nAIAA\r\nADAAI
+    const direcciones = tempFile.buffer.toString().split(regex2)
+
+    // Función a realizar por cada dirección recibida
+    direcciones.forEach(direccion => {
+      console.log('droneId:', droneId, 'direccion:',direccion)
+      // AGREGAR FUNCION PARA CALCULAR LA NUEVA POSICION DEL DRON
+    });
+  }
+  
+  res.status(200)
 })
 
 
