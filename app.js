@@ -23,6 +23,44 @@ app.get("/", (req, res) => {
 })
 app.use("/drones", routeDrones)
 
+// api de prueba para devolver zip
+const options = {
+    root: __dirname,
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  }
+
+app.get('/reporte', (req, res) => {
+    const fileName = './reporte.zip'
+    res.sendFile(fileName, options, function (err) {
+      if (err) {
+        next(err)
+      } else {
+        console.log('Sent:', fileName)
+      }
+    })
+})
+
+
+// api para recibir reportes del frontend
+const path = require('path')
+const multer = require('multer') // v1.0.5
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname,'/uploads'))
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname)
+    }
+  })
+const upload = multer({ storage: storage }) // for parsing multipart/form-data
+app.post('/input',upload.single('file'), (req, res) => {
+    console.log('post')
+    res.status(200)
+})
 
 
 module.exports = app
