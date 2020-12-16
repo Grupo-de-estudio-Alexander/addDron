@@ -52,21 +52,28 @@ app.get('/reporte', async (req, res) => {
       console.log('files: ', reportes)
 
       // Generar zip con los reportes
-      generarZip(reportes)
+      await generarZip(reportes)
 
       // enviar archivo zip generado
       const reporteZip = './src/reporte.zip'
 
-      setTimeout(() => {
-        res.status(200)
-        .sendFile(reporteZip, options, function (err) {
-          if (err) {
-            next(err)
-          } else {
-            console.log('Sent:', reporteZip)
-          }
-        })
-      }, 2000)
+      res.status(200).sendFile(reporteZip, options, function (err) {
+        if (err) {
+          next(err)
+        } else {
+          console.log('Sent:', reporteZip)
+        }
+      })
+      // setTimeout(() => {
+      //   res.status(200)
+      //   .sendFile(reporteZip, options, function (err) {
+      //     if (err) {
+      //       next(err)
+      //     } else {
+      //       console.log('Sent:', reporteZip)
+      //     }
+      //   })
+      // }, 2000)
     }) 
 })
 
@@ -74,7 +81,6 @@ app.get('/reporte', async (req, res) => {
 // api para recibir reportes del frontend
 
 const multer = require('multer') // modulo para recibir archivos
-const { pathToFileURL } = require("url")
 var storage = multer.memoryStorage() // metodo para leer el contenido del archivo
 const upload = multer({ storage: storage }) // setting para poder leer el contenido
 
