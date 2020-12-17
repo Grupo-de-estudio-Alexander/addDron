@@ -1,4 +1,1 @@
-Envio 1, ubicacion final en 4,6
-Envio 0, ubicacion final en 5,9
-Envio 0, ubicacion final en 7,5
-Envio 2, ubicacion final en 0,3
+Envio 1, ubicacion final en 5,0

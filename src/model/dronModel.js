@@ -18,8 +18,11 @@ const dronSchema = new Schema({
     },
     grilla: {
         type: Number
+    },
+    numeroDeEnvios:{
+        type:Number,
+        default: 0
     }
-
 }, {
     timestamps: true
 })
