@@ -2,6 +2,7 @@ const { model } = require("mongoose")
 const modelDron = require("../model/dronModel")
 const path = require('path')
 const fs = require('fs')
+const creadorReporte = require('../services/crearReporte')
 
 
 class ControllerDron {
@@ -78,13 +79,18 @@ class ControllerDron {
             console.log(ubicacion)
             if (capacidad > 0 ) {
                 capacidad -= 1
-                await id.updateOne({posicionInicial:ubicacion,capacidad:capacidad}) 
+                await id.updateOne({posicionInicial:ubicacion,capacidad:capacidad, orientacion:estado}) 
 
             }else{
-                await id.updateOne({posicionInicial:[0,0],capacidad:3}) 
+                await id.updateOne({posicionInicial:[0,0],capacidad:3, orientacion:0}) 
                 
             }
+            // crear reporte
+            creadorReporte(capacidad, ubicacion, req.body.droneId)
 
+            if (req.body.type) {
+                return id
+            }
             res.status(200).json(id)
 
 
