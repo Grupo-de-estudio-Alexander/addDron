@@ -7,6 +7,7 @@ const helmet = require("helmet")
 const morgan = require("morgan")
 const cors = require("cors")
 const routeDrones = require("./src/routes/dronRoute")
+const dronControlador = require('./src/controllers/dronController')
 
 const app = express()
 
@@ -57,23 +58,23 @@ app.get('/reporte', async (req, res) => {
       // enviar archivo zip generado
       const reporteZip = './src/reporte.zip'
 
-      res.status(200).sendFile(reporteZip, options, function (err) {
-        if (err) {
-          next(err)
-        } else {
-          console.log('Sent:', reporteZip)
-        }
-      })
-      // setTimeout(() => {
-      //   res.status(200)
-      //   .sendFile(reporteZip, options, function (err) {
-      //     if (err) {
-      //       next(err)
-      //     } else {
-      //       console.log('Sent:', reporteZip)
-      //     }
-      //   })
-      // }, 2000)
+      // res.status(200).sendFile(reporteZip, options, function (err) {
+      //   if (err) {
+      //     next(err)
+      //   } else {
+      //     console.log('Sent:', reporteZip)
+      //   }
+      // })
+      setTimeout(() => {
+        res.status(200)
+        .sendFile(reporteZip, options, function (err) {
+          if (err) {
+            next(err)
+          } else {
+            console.log('Sent:', reporteZip)
+          }
+        })
+      }, 2000)
     }) 
 })
 
@@ -107,13 +108,33 @@ app.post('/input',upload.any(), async (req, res) => {
     const direcciones = tempFile.buffer.toString().split(regex2)
 
     // Función a realizar por cada dirección recibida
-    direcciones.forEach(direccion => {
-      console.log('droneId:', droneId, 'direccion:',direccion)
+    for (let j=0; j<direcciones.length; j++) {
+      console.log('droneId:', droneId, 'direccion:',direcciones[j])
+      await dronControlador.UbicacionDron({
+        body: {
+          droneId,
+          direccion: direcciones[j],
+          type: 'input'
+        }
+      })
+    }
+    // direcciones.forEach( direccion => {
+      
       // AGREGAR FUNCION PARA CALCULAR LA NUEVA POSICION DEL DRON
-    });
+      // await dronControlador.UbicacionDron({
+      //   body: {
+      //     droneId,
+      //     direccion,
+      //     type: 'input'
+      //   }
+      // })
+      
+      // setTimeout( () => {
+      //   }, 3000)
+    // });
   }
-  
-  res.status(200)
+  console.log('api terminadaa')
+  return res.status(200).send('termino')
 })
 
 
