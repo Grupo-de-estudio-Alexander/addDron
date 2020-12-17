@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const creadorReporte = require('../services/crearReporte')
 
+const deleteFile = require("../services/deleteFile")
 
 class ControllerDron {
     /// API Crea un Dron    //////////
@@ -48,6 +49,7 @@ class ControllerDron {
             let tamañoGrilla = initialConfig.tamanoGrilla
             let capacidad = id.capacidad
             let historial = id.historial
+            let envios = id.numeroDeEnvios + 1
 
             // 0 = NORTE, 1 ORIENTE, 2 SUR 3 OCCIDENTE
             array.forEach(letra => {
@@ -81,14 +83,14 @@ class ControllerDron {
             console.log(ubicacion)
             if (capacidad > 0) {
                 capacidad -= 1
-                await id.updateOne({ posicionInicial: ubicacion, capacidad: capacidad, orientacion: estado })
+                await id.updateOne({ posicionInicial: ubicacion, capacidad: capacidad, orientacion: estado, numeroDeEnvios: envios })
 
             } else {
                 await id.updateOne({ posicionInicial: [0, 0], capacidad: 3, orientacion: 0 })
 
             }
             // crear reporte
-            creadorReporte(capacidad, ubicacion, req.body.droneId)
+            creadorReporte(envios, ubicacion, req.body.droneId)
 
             if (req.body.type) {
                 return id
@@ -112,9 +114,17 @@ class ControllerDron {
             console.log(error);
         }
 
+
     }
 
-
+deleteAllFiles = async(req, res) =>{
+    try{
+        deleteFile()
+        res.status(200).json("delete file") 
+    }catch(error){
+        console.log(error);
+    }
+}
 }
 
 const controllerDron = new ControllerDron()

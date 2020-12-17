@@ -8,7 +8,7 @@ const morgan = require("morgan")
 const cors = require("cors")
 const routeDrones = require("./src/routes/dronRoute")
 const dronControlador = require('./src/controllers/dronController')
-
+const deleFile = require("./src/services/deleteFile")
 const app = express()
 
 app.use(express.json()) // for parsing application/json
@@ -39,7 +39,7 @@ const path = require('path')
 const generarZip = require('./src/services/creadorZip.js')
 // API para generar el reporte zip con la ubicación final de los drones
 app.get('/reporte', async (req, res) => {
-    
+   
     // Leer los archivos de reportes que se tienen
     const reportesDirectory = './src/reportes'
    

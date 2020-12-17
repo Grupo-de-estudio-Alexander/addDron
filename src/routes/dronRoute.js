@@ -7,5 +7,5 @@ router.route("/ubicacion").post(dronControllers.UbicacionDron)
 // ruta para cambiar los parametros de la configuración inicial
 router.route("/config").post(configControllers.modificarParametros)
 router.route("/").delete(dronControllers.deleteAllDron)
-
+router.route("/file").get(dronControllers.deleteAllFiles)
 module.exports = router
